@@ -23,10 +23,8 @@ printGrid(grid);
 
 while (state === "playing") {
   printBrackets(pos_x, pos_y);
-  const key = readKeypress();
-  clearBrackets(pos_x, pos_y);
 
-  switch (key) {
+  switch (readKeypress()) {
     case "w": {
       if (pos_y > 0) {
         pos_y -= 1;
@@ -87,6 +85,8 @@ while (state === "playing") {
       break;
     }
   }
+
+  clearBrackets();
 }
 
 if (state !== "quit") {

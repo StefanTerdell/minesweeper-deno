@@ -10,13 +10,15 @@ export function initTerm(): void {
 export function cleanupTerm(): void {
   Deno.stdin.setRaw(false);
 
+  console.clear();
+
   // Show cursor
   write("\u001b[?25h");
 }
 
 export function write(text: string): void {
   const out = new TextEncoder().encode(text);
-  
+
   writeAllSync(Deno.stdout, out);
 }
 
@@ -38,7 +40,19 @@ export function printBrackets(x: number, y: number): void {
   writeWithPosition("]", x * 2 + 3, y + 1);
 }
 
-export function clearBrackets(x: number, y: number): void {
-  writeWithPosition(" ", x * 2 + 1, y + 1);
-  writeWithPosition(" ", x * 2 + 3, y + 1);
+function moveCursorHorizontally(positions: number): void {
+  if (positions > 0) {
+    //  move right N positions
+    write(`\u001b[${positions}C`);
+  } else {
+    //  move left N positions
+    write(`\u001b[${positions * -1}D`);
+  }
+}
+
+export function clearBrackets(): void {
+  moveCursorHorizontally(-3);
+  write(" ");
+  moveCursorHorizontally(1);
+  write(" ");
 }
