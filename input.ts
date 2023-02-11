@@ -3,12 +3,14 @@ import { writeAllSync } from "https://deno.land/std@0.177.0/streams/write_all.ts
 export function initTerm(): void {
   Deno.stdin.setRaw(true);
 
+  // Hide cursor
   write("\u001b[?25l");
 }
 
 export function cleanupTerm(): void {
   Deno.stdin.setRaw(false);
 
+  // Show cursor
   write("\u001b[?25h");
 }
 
@@ -19,6 +21,7 @@ export function write(text: string): void {
 }
 
 function writeWithPosition(text: string, x: number, y: number): void {
+  // Uses ANSI escape codes to set position before printing text
   write(`\u001b[${y};${x}H${text}`);
 }
 
